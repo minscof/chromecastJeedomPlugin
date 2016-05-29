@@ -1,0 +1,6 @@
+{
+    "plugins\/chromecast\/plugin_info\/info.xml": {
+        "Plugin pour contrôler vos Chromecasts": "Plugin pour contrôler vos Chromecasts",
+        "Prérequis python 2.7.x": "Prérequis python 2.7.x"
+    }
+}

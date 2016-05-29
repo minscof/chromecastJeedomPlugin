@@ -1,0 +1,441 @@
+<style type="text/css">
+.chromecast .cmd a {
+	width: 30px;
+	height: 30px;
+	font-size: 1em;
+}
+
+.chromecast .cmd.col2 a {
+	width: 85px;
+	height: 30px;
+	font-size: 1em;
+}
+
+@font-face {
+	font-family: liquid;
+	src:
+		url("plugins/chromecast/core/template/fonts/enhanced_led_board-7.ttf")
+		format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+span.titlespsb {
+	font-family: liquid;
+	font-size: 14px;
+	color: #text_color#;
+	letter-spacing: 1px;
+}
+
+.arrondie {
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	border-radius: 7px;
+}
+
+.bas_chromecast_widget {
+	background-color: #5d9cec;
+	z-index: 2;
+}
+
+.control-mute {
+	font-size: 25px;
+	line-height: 0.7;
+}
+</style>
+
+<div
+	class="eqLogic eqLogic-widget chromecast_widget chromecast"
+	data-version="dashboard"
+	style="text-align: center; overflow: hidden; background-color: #5d9cec;"
+	data-eqlogic_id="#id#">
+	<!--link rel="stylesheet" href="plugins/chromecast/core/template/dashboard/css/style.css" /-->
+
+	<div style="text-align: center; overflow: hidden; margin: 0px; padding: 0px; #background#">
+		<div>
+			<a class=" btn-circle btn-xs cmd power"
+			data-cmd_id="#toggle_power_id#"
+			style="position: absolute; left: -3px; top: -4px; font-size: 0.8em;"
+			title="Power">#power#</a>
+		
+			<strong><a href="#eqLink#"
+				style="font-size: 1em; text-align: center;"> #name# </a></strong>
+		</div>
+		<div>
+			<div class="col-xs-1"></div>
+			<div class="form-group  col-xs-10">
+				<select class="form-control" id="application#id#">
+					<option value="Choisir">Choisir une application...</option>
+				</select>
+			</div>
+			<div class="col-xs-1"></div>
+		</div>
+		
+		<span class="titlespsb" title="#oristatusText#" id="statusText#id#">
+				#statusText# </span>
+		<span class="titlespsb" title="#orititle#" id="title#id#">
+				#title# </span>
+		
+	</div>
+
+
+	<!-- Partie basse du Widget-->
+	<div class="bas_chromecast_widget playback"
+		style="display: block; margin-bottom: 10px; margin-top: 5px;">
+
+		<a class="btn btn-default btn-circle btn-xs cmd play"
+			style="margin-right: 10px;" data-cmd_id="#cmd_play_id#"><i
+			class="fa fa-play" title="Lecture"></i></a> <a
+			class="btn btn-default btn-circle btn-xs cmd pause"
+			style="margin-right: 10px;" data-cmd_id="#cmd_pause_id#"><i
+			class="fa fa-pause" title="Pause"></i></a>
+		<div class="slider_time" data-cmd_id="#time_id#"
+			style="width: 260px; margin-bottom: 5px; margin-top: 5px;" value=0></div>
+		<div>
+			<span id="current#id#"></span>/<span id="duration#id#"
+				style="padding-right: 55px;"></span> <a
+				class="btn btn-default btn-circle btn-xs cmd previous"
+				data-cmd_id="#cmd_previous_id#" title="Précédent"><i
+				class="fa fa-step-backward"></i></a> <a
+				class="btn btn-default btn-circle btn-xs cmd stepbackward"
+				data-cmd_id="#cmd_rewind_id#" title="Retour rapide"><i
+				class="fa fa-backward"></i></a> <a
+				class="btn btn-default btn-circle btn-xs cmd stop"
+				data-cmd_id="#cmd_stop_id#"><i class="fa fa-stop" title="Stop"></i></a>
+			<a class="btn btn-default btn-circle btn-xs cmd stepforward"
+				data-cmd_id="#cmd_forward_id#"><i class="fa fa-forward"
+				title="Avance rapide"></i></a> <a
+				class="btn btn-default btn-circle btn-xs cmd next"
+				data-cmd_id="#cmd_next_id#"><i class="fa fa-step-forward"
+				title="Suivant"></i></a>
+		</div>
+
+		<div class="volume_chromecast_widget"
+			style="margin-bottom: 5px; margin-top: 5px;">
+			<div>
+				<!-- button id="mute" class="btn btn-primary fa-volume-off"> Mute</button-->
+
+				<a class="btn btn-circle btn-xs " id="mute"
+					data-cmd_id="#cmd_unmute_id#" title="Mute"><span
+					class="glyphicon glyphicon-volume-up control-mute"
+					aria-hidden="true"></span></a>
+				<!--  a class="btn btn-circle btn-xs cmd unmute"
+					data-cmd_id="#cmd_unmute_id#" title="Unmute"><span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span></a>
+				<a class="btn btn-circle btn-xs cmd mute"
+					data-cmd_id="#cmd_mute_id#" title="Mute"><span class="glyphicon glyphicon-volume-off" aria-hidden="true"></span></a-->
+				<a class="btn btn-circle btn-xs cmd vol-"
+					data-cmd_id="#cmd_vol-_id#" title="Volume-"><i
+					class="fa fa-volume-down"></i></a>
+				<div class="volume cmd noRefresh" data-cmd_id="#volume_id#"
+					style="width: 140px;"></div>
+				<a class="btn btn-circle btn-xs cmd vol+"
+					data-cmd_id="#cmd_vol+_id#" style="position: relative;"
+					title="Volume+"><i class="fa fa-volume-up"></i></a>
+			</div>
+
+		</div>
+	</div>
+
+	<script type="text/javascript">
+	
+
+	var mySingleton = ( function( window, undefined ) {
+		  
+		var instance = null;
+		// revealing module pattern that handles initialization of our new module
+		function initializeNewModule() {
+		    
+			function start() {
+		    	var id = localStorage.getItem('timer');
+		      	if (id != '' ) {
+		    		console.log('timer already set !'+id);
+		    		console.log( 'to be sure ! clear interval:'+id );
+		    		localStorage.setItem('timer','');
+		    	 	clearInterval(id);
+				}
+		    	var id = setInterval(function(){
+						slider_time=slider_time+5;
+					    console.log('slider time singleton 2 = '+slider_time);
+					    $('span#current#id#').html(secondsTimeSpanToHMS(slider_time));
+					    $('.chromecast[data-eqLogic_id=#id#] .slider_time').bootstrapSlider('setValue',slider_time);
+					}, 5000);
+		    	localStorage.setItem('timer',id);
+		    	console.log('id timer='+id);
+		    }
+		    
+		    function stop() {
+		      
+		      var id = localStorage.getItem('timer');
+		      if (id == '' ) {
+		    	  console.log('timer not yet set already clear !')
+		      } else {
+		    	  console.log( 'clear interval:'+id );
+		    	  localStorage.setItem('timer','');
+		    	  clearInterval(id);
+		      }
+		    }
+		    
+		    return {
+		      startTimer : start,
+		      stopTimer : stop
+		    };
+		    
+		}
+		  
+		// handles the prevention of additional instantiations
+		function getInstance() {
+		    if( ! instance ) {
+		      instance = new initializeNewModule();
+		    }
+		    return instance;
+		}
+		  
+		return {
+		    getInstance : getInstance
+		};
+		  
+	} )( window );
+	
+	
+	
+	$('.chromecast[data-eqLogic_id=#id#] .volume').bootstrapSlider({
+		min: 0,
+		max: 100,
+		value: ('#volume#' == '') ? 0 : parseInt('#volume#')
+	});
+	var slider_time = #current_time#;
+	var duration_time = #duration#;
+	
+	//var slider_time = 5;
+	console.log('slider time ='+slider_time);
+	
+	$('.chromecast[data-eqLogic_id=#id#] .slider_time').bootstrapSlider({
+		min: 0,
+		max: (duration_time == '') ? 0 : parseInt(duration_time),
+		value: slider_time
+	});
+	
+	
+    $('.chromecast[data-eqLogic_id=#id#] .slider.slider-horizontal').css('z-index',1);
+	$('.chromecast[data-eqLogic_id=#id#] .volume').on('slideStop', function (ev) {
+		jeedom.cmd.execute({id: '#volume_id#', value: {slider: ev.value}});
+	});
+	
+	$('.chromecast[data-eqLogic_id=#id#] .slider_time').on('slideStop', function (ev) {
+		jeedom.cmd.execute({id: '#time_id#', value: {slider: ev.value}});
+		/*
+		console.log('clear interval:'+progressBarTimer#id#);
+		clearInterval(progressBarTimer#id#);
+		progressBarTimer#id# = false;
+		*/
+		mySingleton.getInstance().stopTimer();
+	});
+	
+	var applications = { "Backdrop" : "Backdrop", "Chrome Mirroring" : "Chrome Mirroring", "YouTube": "YouTube", "FrReplay": "FrReplay", "Wuaky": "Wuaky", "Default Media Receiver": "Lire Url", "Autre": "Autre","aucune": "aucune" };
+	
+	for (var index_appli in applications) {
+		var o = new Option(index_appli, applications[index_appli]);	
+		/// jquerify the DOM object 'o' so we can use the html method
+		$(o).html(applications[index_appli]);
+		$('#application#id#').append(o);
+	}
+	
+	var index_application="#appli#";
+	if (index_application == "francetv pluzz") {
+		index_application = "FrReplay";
+	}
+
+	if (!(index_application in applications)) {
+		index_application = 'Autre';
+	}
+	appli=applications[index_application];
+	
+	//console.log('index application courante ='+index_application);
+	//console.log('application courante ='+appli);
+	//var index_application = applications.indexOf(appli);
+	//var index_application = applications.getKeyByValue(appli);
+	
+	
+	if (index_application !== undefined) {
+		//console.log('selected appli='+applications[index_application])
+		$('#application#id#').val(applications[index_application]);
+	} else {
+		$('#application#id#').val("Autre");
+	}
+	
+	//console.log('application ='+$('#application#id#').val());	
+	
+	//$("#application#id#").change(function() {
+	$("#application#id#").on('change click',function() {	
+		applicationInit();
+		var appli = $("#application#id#").val();
+		console.log('appli='+appli)
+		if (['Lire Url'].indexOf(appli) >= 0) {
+			$('#md_modal2').dialog({title: "Votre ChromeCast #name#"});				
+			$('#md_modal2').load('index.php?v=d&plugin=chromecast&modal=your.chromecast&id='+ #id#+'&appli='+encodeURIComponent(appli)).dialog('open');
+		}
+		if (['YouTube'].indexOf(appli) >= 0 && #YouTube# == 1 ) {
+			$('#md_modal2').dialog({title: "Votre ChromeCast #name#"});				
+			$('#md_modal2').load('index.php?v=d&plugin=chromecast&modal=your.chromecast&id='+ #id#+'&appli='+encodeURIComponent(appli)).dialog('open');
+		}
+	});
+	
+		
+    function applicationInit() {
+	    if (['Backdrop', 'Autre','aucune','Choisir'].indexOf($('#application#id#').val()) >= 0) {
+	    	$('#statusText#id#').hide();
+			if ($('#title#id#').text() !== 'inconnu') {
+				console.log('title1='+$('#title#id#').text()+' ***');
+				$('#title#id#').show();	
+			} else {
+				$('#title#id#').hide();
+			}
+			//$('#title#id#').hide();
+		} else if ($("#application#id#").val() == 'Chrome Mirroring') {
+			if ($('#statusText#id#').text() !== 'inconnu' && $('#statusText#id#').text() !== $("#application#id#").val()) {
+				$('#statusText#id#').show();	
+			} else {
+				$('#statusText#id#').hide();
+			}
+			$('#title#id#').hide();
+		} else {
+			if ($('#statusText#id#').text() !== 'inconnu') {
+				$('#statusText#id#').show();	
+			} else {
+				$('#statusText#id#').hide();
+			}
+			if ($('#title#id#').text() !== 'inconnu') {
+				console.log('title='+$('#title#id#').text()+' ***');
+				$('#title#id#').show();	
+			} else {
+				$('#title#id#').hide();
+			}
+		}
+    }
+    
+    applicationInit();
+    
+    var progressBarTimer#id# = false;
+	//
+	if('#state_nb#' == 1){
+		console.log('in play');
+		$('.chromecast[data-eqLogic_id=#id#] .cmd.play').hide();
+		$('.chromecast[data-eqLogic_id=#id#] .cmd.pause').show();
+			//if (progressBarTimer#id# == false && duration_time > 0) {
+			if (duration_time > 0) {	
+				/*
+				progressBarTimer#id# = setInterval(function(){
+				    slider_time=slider_time+5;
+				    console.log('slider time = '+slider_time);
+				    $('span#current').html(secondsTimeSpanToHMS(slider_time));
+				    $('.chromecast[data-eqLogic_id=#id#] .slider_time').bootstrapSlider('setValue',slider_time);
+				}, 5000);
+				console.log('create new interval : '+progressBarTimer#id#);
+				*/
+				//progressBarTimer#id# = mySingleton.getInstance().startTimer();
+				mySingleton.getInstance().startTimer();
+			} else {
+				/*
+				if (progressBarTimer#id#) {
+					console.log('timer déjà en cours !!!!!!!');
+				} else {
+					console.log('no duration => no timer ! :'+duration_time);
+				}
+				*/
+			}
+	} else {
+		console.log('in pause ');
+		$('.chromecast[data-eqLogic_id=#id#] .cmd.play').show();
+		$('.chromecast[data-eqLogic_id=#id#] .cmd.pause').hide();
+		mySingleton.getInstance().stopTimer();
+		/*
+		console.log('clear interval:'+progressBarTimer#id#);
+		clearInterval(progressBarTimer#id#);
+		progressBarTimer#id# = false;
+		*/
+	}
+	
+	var muted = #volumeMuted#;
+	//console.log('muted='+muted)
+	
+	function muteInit(mute) {
+		
+		if (!muted) {
+			$("span",mute).prop('title','Mute');
+            $("span",mute).removeClass("glyphicon glyphicon-volume-off");
+            $("span",mute).addClass("glyphicon glyphicon-volume-up");
+        } else {
+        	console.log('affiche muted');
+            $("span",mute).prop('title','Unmute');
+            $("span",mute).removeClass("glyphicon glyphicon-volume-up");
+            $("span",mute).addClass("glyphicon glyphicon-volume-off");
+        }
+	}
+	
+	muteInit($("#mute"));
+	
+	$("#mute").click(function() {
+        if (muted) {
+            $("span",this).prop('title','Mute');
+            $("span",this).removeClass("glyphicon glyphicon-volume-off");
+            $("span",this).addClass("glyphicon glyphicon-volume-up");
+            jeedom.cmd.execute({id: "#cmd_unmute_id#"});
+            muted=false;
+        } else {
+            $("span",this).prop('title','Unmute');
+            $("span",this).removeClass("glyphicon glyphicon-volume-up");
+            $("span",this).addClass("glyphicon glyphicon-volume-off");
+            jeedom.cmd.execute({id: "#cmd_mute_id#"});
+            muted=true;
+        }
+	});
+
+	$('span#current#id#').html(secondsTimeSpanToHMS(slider_time));
+	$('span#duration#id#').html(secondsTimeSpanToHMS(#duration#));
+	function secondsTimeSpanToHMS(s) {
+		s = parseInt(s);
+	    var h = Math.floor(s/3600); //Get whole hours
+	    s -= h*3600;
+	    var m = Math.floor(s/60); //Get remaining minutes
+	    s -= m*60;
+	    return (h > 0 ? h+":" : "")+(m < 10 ? '0'+m : m)+":"+(s < 10 ? '0'+s : s); //zero padding on minutes and seconds
+	}
+	
+	$('.chromecast[data-eqLogic_id=#id#] .cmd').on('click', function() {
+		console.log('avant execute'+$(this).data('cmd_id'));
+		/*
+		clearInterval(progressBarTimer#id#);
+		console.log('clear bis interval:'+progressBarTimer#id#);
+		progressBarTimer#id# = false;
+		*/
+		mySingleton.getInstance().stopTimer();
+		jeedom.cmd.execute({id: $(this).data('cmd_id')});
+		console.log('après execute');
+	});
+	
+	function MySingletonClass () {
+		console.log('appel singleton');
+		if (arguments.callee._singletonInstance) {
+			  console.log('setInterval already done -'+arguments.callee._singletonInstance);
+			  return arguments.callee._singletonInstance;
+		}
+		console.log('setInterval must be created');
+		
+		arguments.callee._singletonInstance = this;
+
+		//this.foo = function () {
+		    // ...
+		this.foo = setInterval(function(){
+					console.log('slider time singleton 1 = '+slider_time);
+				    slider_time=slider_time+5;
+				    console.log('slider time singleton 2 = '+slider_time);
+				    $('span#current#id#').html(secondsTimeSpanToHMS(slider_time));
+				    $('.chromecast[data-eqLogic_id=#id#] .slider_time').bootstrapSlider('setValue',slider_time);
+				}, 5000);
+		console.log('create new interval : '+this.foo);
+		//};
+	}
+	
+		
+    </script>
+</div>

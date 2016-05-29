@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+    <id>chromecast</id>
+    <name>Chromecast</name>
+    <description>Plugin pour contrôler vos Chromecasts</description>
+    <icon>icon loisir-musical7</icon>
+    <licence>AGPL</licence>
+    <author>Minscof</author>
+    <installation>Prérequis python 2.7.x</installation>
+    <require>2.0</require>
+    <version>1.0</version>
+    <hasDependency>1</hasDependency>
+    <hasOwnDeamon>1</hasOwnDeamon>
+    <display>panel</display>
+    <mobile>panel</mobile>
+    <category>multimedia</category>
+</info>
+

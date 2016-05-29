@@ -1,0 +1,170 @@
+.bas_chromecast_widget{
+	height: 70px;
+	width: 250px;
+	
+	background-color: #5d9cec;
+	
+	z-index: 2;
+}
+.bas_chromecast_widget_volume{
+	height: 70px;
+	width: 250px;
+	
+	background-color: #5d9cec;
+	
+	z-index: 2;
+}
+
+
+/* PATIE CERCLE */
+.cercle_bas_chromecast_widget{
+	width: 52px;
+	height: 52px;
+	
+	position: absolute;
+	
+	margin : 6.5px 99px 6.5px;
+	
+	border: 2px solid black;
+	
+	border-radius:50%;
+	
+	z-index: 3;
+	
+	opacity: 0.6;
+}
+.cercle_bas_chromecast_widget:hover{
+	
+	border-radius:20%;
+	
+	border: 2px solid #679403;
+	
+	opacity: 1;
+	transition: all 2s;
+}
+.play_in_cercle{
+	width: 30px;
+	height: 30px;
+	
+	position: absolute;
+	
+	margin-left: 12px;
+	margin-top: 9px;
+	
+	cursor:pointer;
+	
+	z-index: 4;
+}
+.pause_in_cercle{
+	width: 30px;
+	height: 30px;
+	
+	position: absolute;
+	
+	margin-left: 9px;
+	margin-top: 9px;
+	
+	cursor:pointer;
+	
+	z-index: 4;
+}
+.avance_gauche{
+	width: 20px;
+	height: 20px;
+	
+	position: absolute;
+	
+	margin-top: 23px;
+	left: 48px;
+	
+	-ms-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+    
+    cursor:pointer;
+    
+    z-index: 4;
+    
+    opacity: 0.6;
+}
+.avance_gauche:hover{
+	opacity: 1;
+}
+.avance_droite{
+	width: 20px;
+	height: 20px;
+	
+	position: absolute;
+	
+	margin-top: 22px;
+	right: 48px;
+	
+	cursor:pointer;
+	
+	z-index: 4;
+	
+	opacity: 0.6;
+}
+.avance_droite:hover{
+	opacity: 1;
+}
+
+.change_gauche{
+	width: 20px;
+	height: 20px;
+	
+	position: absolute;
+	
+	margin-top: 23px;
+	left: 25px;
+	
+	-ms-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+    
+    cursor:pointer;
+    
+    z-index: 4;
+    
+    opacity: 0.6;
+}
+.change_gauche:hover{
+	opacity: 1;
+}
+.change_droite{
+	width: 20px;
+	height: 20px;
+	
+	position: absolute;
+	
+	margin-top: 22px;
+	right: 25px;
+    
+    cursor:pointer;
+    
+    z-index: 4;
+    
+    opacity: 0.6;
+}
+.change_droite:hover{
+	opacity: 1;
+}
+
+.working_droite{
+	width: 15px;
+	height: 40px;
+	
+	position: absolute;
+	
+	top: 143.5px;
+	right: 5px;
+	
+	cursor:pointer;
+	
+	z-index: 4;
+	
+	opacity: 0.1;
+}
+.working_droite:hover{
+	opacity: 1;
+}
