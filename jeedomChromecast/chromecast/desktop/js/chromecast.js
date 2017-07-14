@@ -28,7 +28,7 @@ function addCmdToTable(_cmd) {
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="id" style="display : none;">';
     tr += '<span class="cmdAttr form-control input-sm" data-l1key="name"></td>';
     tr += '<td>';
-    //tr += '<span><input type="checkbox" data-size="mini" data-label-text="{{Historiser}}" class="cmdAttr bootstrapSwitch" data-l1key="isHistorized" /></span> ';
+    //tr += '<span><label class="checkbox-inline"><input type="checkbox" data-size="mini" data-label-text="{{Historiser}}" class="cmdAttr" data-l1key="isHistorized" /></label></span> ';
     tr += '</td>';
     tr += '<td>';
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" style="display : none;">';

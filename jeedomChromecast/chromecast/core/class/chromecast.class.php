@@ -117,7 +117,7 @@ class chromecast extends eqLogic {
 		message::removeAll('chromecast', 'unableStartDeamon');
 		//mettre une gestion d'event pour gérer le statut de daemon
 		config::save('daemon', '1',  'chromecast');
-		log::add('chromecast', 'info', 'chromecast lancé');
+		log::add('chromecast', 'info', 'Chromecast daemon lancé');
 		return true;
 	}
 	
@@ -132,7 +132,7 @@ class chromecast extends eqLogic {
 		$context = stream_context_create($opts);
 		//pour éviter des logs intempestifs quand on cherche à arrêter un serveur déjà arrêté.. @
 		@$file = file_get_contents('http://127.0.0.1:'.config::byKey('chromecastPort', 'chromecast', '0').'/halt', false, $context);
-		log::add('chromecast', 'info', 'Arrêt du démon chromecast');
+		log::add('chromecast', 'info', 'Arrêt du daemon chromecast');
 		$deamon_info = self::deamon_info();
 		if ($deamon_info['state'] == 'ok') {
 			sleep(2);
@@ -182,7 +182,7 @@ class chromecast extends eqLogic {
 	}
 	
 	public static function executeAction($parm) {
-		if (self::deamon_info()['state']=='nok') return array(false,__('Il faut démarrer le démon avant de lancer une commande.', __FILE__));
+		if (self::deamon_info()['state']=='nok') return array(false,__('Il faut démarrer le daemon avant de lancer une commande.', __FILE__));
 		$count = 0;
 		$opts = array(
 				'http'=>array(
@@ -199,7 +199,7 @@ class chromecast extends eqLogic {
 			} else {
 				$response = 'pas de header http !';
 			}
-			return array(false,"Problème dans la réponse du  démon : $response - vérifier que votre démon est bien démarré et/ou regarder ses logs",$http_response_header[0]);
+			return array(false,"Problème dans la réponse du  daemon : $response - vérifier que votre daemon est bien démarré et/ou regarder ses logs",$http_response_header[0]);
 		
 		}
 		return array(true,json_decode($file));
@@ -999,15 +999,14 @@ class chromecastCmd extends cmd {
 		log::add ( 'chromecast', 'debug', 'Execution de la commande suivante1 : ' . $parm );
 		// $result=shell_exec($cmd);
 		$result = chromecast::executeAction ( $parm );
+		/*
 		$a = print_r ( $result, true );
 		log::add ( 'chromecast', 'debug', 'cmd result= ' . $a );
+		*/
 		if (! $result [0]) {
-			log::add ( 'chromecast', 'debug', 'cmd ici' );
 			if (isset($result [2]) and $result [2] == 'HTTP/1.1 404 Not Found') {
-				log::add ( 'chromecast', 'debug', 'cmd ici1' );
 				$cmd = $chromecast->getCmd ( 'info', 'status' );
 				if ($cmd) {
-					log::add ( 'chromecast', 'debug', 'cmd ici2' );
 					$value = 'off';
 					log::add ( 'chromecast', 'debug', 'event status ok value :' . $value );
 					$cmd->event ( $value );
@@ -1015,16 +1014,15 @@ class chromecastCmd extends cmd {
 					$cmd->save ();
 					$chromecast->refreshWidget ();
 				} else {
-					log::add ( 'chromecast', 'debug', 'cmd ici3' );
 					log::add ( 'chromecast', 'debug', 'cmd status not found for ' . $device );
 				}
-				log::add ( 'chromecast', 'debug', 'cmd ici4' );
 			}
-			log::add ( 'chromecast', 'debug', 'cmd ici5' );
-			log::add ( 'chromecast', 'debug', 'Execution de la commande suivante2 : ' . $parm . ' result=' . $result [1] );
+			//log::add ( 'chromecast', 'debug', 'Execution de la commande suivante2 : ' . $parm . ' result=' . $result [1] );
 		} else {
+			/*
 			$a = print_r ( $result [1], true );
 			log::add ( 'chromecast', 'debug', 'retour de la commande ' . $a );
+			*/
 		}
 	}
 }

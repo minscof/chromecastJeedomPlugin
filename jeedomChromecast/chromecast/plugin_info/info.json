@@ -1,0 +1,16 @@
+{
+    "id":"chromecast",
+    "name":"Chromecast",
+    "description":"Plugin pour contrôler vos Chromecasts",
+    "icon":"icon loisir-musical7",
+    "licence":"AGPL",
+    "author":"Minscof",
+    "installation":"Prérequis python 2.7.x",
+    "require":"2.0",
+    "version":"1.0",
+    "hasDependency":"1",
+    "hasOwnDeamon":"1",
+    "display":"panel",
+    "mobile":"panel",
+    "category":"multimedia"
+}
