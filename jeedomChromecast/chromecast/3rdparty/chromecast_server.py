@@ -18,6 +18,8 @@ import pychromecast
 import uuid
 import logging
 
+__version__='0.9'
+
 #sys.setdefaultencoding("utf-8")
 # The socket connection is being setup
 CONNECTION_STATUS_CONNECTING = "CONNECTING"
@@ -254,11 +256,14 @@ class statusMediaListener:
 def refreshChromecastsList():
         global chromecasts, casts
         try :
-            chromecastsCurrent=pychromecast.get_chromecasts_as_dict(tries=2)
+            chromecastsCurrentList=pychromecast.get_chromecasts(tries=2)
+            chromecastsCurrent={cc.device.friendly_name: cc
+                for cc in chromecastsCurrentList}
+            #chromecastsCurrent=pychromecast.get_chromecasts_as_dict(tries=2)
             #chromecastsCurrent=pychromecast.get_chromecasts_as_dict()
         except AttributeError as e:
             print '===================='
-            print 'exception get_chromecasts_as_dict'
+            print 'exception get_chromecasts'
             print("args: ", e.args)
             print '===================='
         except Exception,e:
@@ -777,24 +782,7 @@ class DictDiffer(object):
         return self.past_keys - self.intersect
 
     def changed(self):
-        '''
-        global casts
-        print 'casts=',casts
-        changed=[]
-        for o in self.intersect:
-            self.current_dict[o].wait()
-            print 'current ',self.current_dict[o]
-            if o not in casts or o not in self.current_dict or casts[o]["isStandBy"] != self.current_dict[o].status.is_stand_by:
-                print 'diff clé:',o
-                changed.append(o)
-                continue
-            if o not in casts or o not in self.current_dict or casts[o]["displayName"] != self.current_dict[o].status.display_name:
-                print 'diff clé:',o
-                changed.append(o)
-                continue
-        
-        return set(o for o in changed)
-        '''        
+           
         return set(o for o in self.intersect
                    if self.past_dict[o] != self.current_dict[o])
         
@@ -831,7 +819,7 @@ logger.addHandler(handler_info)
 
 logger.info('Start chromecast daemon %s',sys.argv[1])
 
-if len(sys.argv) > 1 and int(sys.argv[1]) == 1 :
+if len(sys.argv) > 1 and sys.argv[1] == 'debug' :
     level = logging.DEBUG
 else:
     level = logging.INFO

@@ -47,17 +47,17 @@ class chromecast extends eqLogic {
 				'test' => __('Nombre Chromecasts', __FILE__),
 				'result' => ($playerCount) ? __($playerCount, __FILE__) : __('NOK', __FILE__),
 				'advice' => ($playerCount) ? '' : __('Allez sur la page du plugins et lancer un scan de vos chromecasts.', __FILE__),
-				'state' => $version,
+		        'state' => ($playerCount) ? __($playerCount, __FILE__) : false,
 		);
 		$statusDaemon=false;
 		$statusDaemon = config::byKey('daemon','chromecast');
 		$libVer = config::byKey('daemonVer','chromecast');
 		if ($libVer=='') {
-			$libVer = '{{inconnue}}';
+			$libVer = '{{version inconnue}}';
 		}
 	
 		$return[] = array(
-				'test' => __('Daemon', __FILE__),
+				'test' => __('Version Daemon', __FILE__),
 				'result' => ($statusDaemon) ? $libVer : __('NOK', __FILE__),
 				'advice' => ($statusDaemon) ? '' : __('Indique si la daemon est opérationel avec sa version', __FILE__),
 				'state' => $statusDaemon,
@@ -79,20 +79,23 @@ class chromecast extends eqLogic {
 	
 	public static function deamon_start($_debug = false) {
 		self::deamon_stop();
+		$shell = realpath(dirname(__FILE__)).'/../../3rdparty/chromecast_server.py';
+		$string = file_get_contents($shell);
+		preg_match("/__version__='([0-9.]+)/mis", $string, $matches);
+		
+		config::save('daemonVer', 'Version '.$matches[1],  'chromecast');
 		$deamon_info = self::deamon_info();
 		if ($deamon_info['launchable'] != 'ok') {
 			throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
 		}
-		log::add('chromecast', 'info', 'Lancement du daemon chromecast');
+		log::add('chromecast', 'info', 'Lancement du daemon chromecast '.$matches[1]);
 	
-		$shell = realpath(dirname(__FILE__)).'/../../3rdparty/chromecast_server.py';
-		
-		$shell = 'nice -n 19 /usr/bin/python ' . realpath(dirname(__FILE__)).'/../../3rdparty/chromecast_server.py '.$_debug.' scan=true '.config::byKey('chromecastPort', 'chromecast', '0');
-		log::add('chromecast', 'debug', 'Commande complète pour lancer le daemon : ' . $shell);
+		$cmd = 'nice -n 19 /usr/bin/python ' . $shell .($_debug?'debug':'info').' scan=true '.config::byKey('chromecastPort', 'chromecast', '0');
+		log::add('chromecast', 'debug', 'Commande complète pour lancer le daemon : ' . $cmd);
 		if ($_debug = true) {
-			$result = exec('nohup sudo ' . $shell . ' >> ' . log::getPathToLog('chromecastDaemon') . ' 2>&1 &');
+			$result = exec('nohup sudo ' . $cmd . ' >> ' . log::getPathToLog('chromecastDaemon') . ' 2>&1 &');
 		} else {
-			$result = exec('nohup sudo ' . $shell . '  &');
+			$result = exec('nohup sudo ' . $cmd . '  &');
 		}
 		
 		//$result = exec('nohup sudo ' . $shell . ' >> ' . log::getPathToLog('chromecastDaemon') . ' 2>&1 &');
@@ -116,7 +119,7 @@ class chromecast extends eqLogic {
 		}
 		message::removeAll('chromecast', 'unableStartDeamon');
 		//mettre une gestion d'event pour gérer le statut de daemon
-		config::save('daemon', '1',  'chromecast');
+		//config::save('daemon', '1',  'chromecast');
 		log::add('chromecast', 'info', 'Chromecast daemon lancé');
 		return true;
 	}
@@ -143,7 +146,7 @@ class chromecast extends eqLogic {
 			sleep(2);
 			exec('sudo kill -9 $(ps aux | grep "chromecast_server" | awk \'{print $2}\')');
 		}
-		config::save('daemon', '0',  'chromecast');
+		//config::save('daemon', '0',  'chromecast');
 	}
 	
 	

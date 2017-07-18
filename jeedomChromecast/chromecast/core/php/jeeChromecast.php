@@ -76,5 +76,5 @@ $changed=false;
 	}
 if ($changed) {
 	$chromecast->refreshWidget();
-	log::add('chromecast', 'debug', 'refresh widget');
+	//log::add('chromecast', 'debug', 'refresh widget');
 }
